@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPSS - Contacto</title>
+    <link rel="stylesheet" href="/Programação Web/Projeto/CSS/Contatos.css">
+</head>
+<body>
+    <header>
+        <div class="HeaderContainer">
+            <a class="HeaderLogo" href="#"><img class="Logo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="IPSSLogo"></a>
+            <div class="HamburgerIcon"><img id ="hamburger" src="/Programação Web/Projeto/IMG/hamburger-menu.svg" alt="HamburgerMenu"></div>
+            <div class="HeaderLinks">
+                <div class="SidebarTop">
+                    <img class="SidebarLogo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="sidebarlogo">
+                    <img class="SidebarX" src="/Programação Web/Projeto/IMG/x.svg" alt="x">
+                </div>
+                <hr></hr>
+                <ul class ="HeaderMenu">
+                    <li><a class="HeaderOptions" id="ButtonHome" href="/Programação Web/Projeto/HTML/Inicio.html">Home</a></li>
+                    <li><a class="HeaderOptions" id="ButtonAtividades" href="/Programação Web/Projeto/HTML/Atividades.html">Atividades</a></li>
+                    <li><a class="HeaderOptions" id="ButtonGaleria" href="/Programação Web/Projeto/HTML/Galeria.html">Galeria</a></li>
+                    <li><a class="HeaderOptions" id="ButtonContactos" href="/Programação Web/Projeto/HTML/Contactos.html">Contactos</a></li>
+                    <li><p class="HeaderOptions" id="ButtonLogin" onclick="openOverlay()">Login/Registar</p></li>
+                    <li><a class="HeaderOptions" id="ButtonUser" href="/Programação Web/Projeto/HTML/Utilizador.html"><img src="/Programação Web/Projeto/IMG/user-icon.svg" alt="user"></a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="Contactos">
+        <h1>Contactos</h1>
+        <hr></hr>
+    </div>
+    <div class="ContactosEspaco">
+        <div class="ContactosInfo">
+            <ul>
+                <li>Telefone: +351 925 186 686</li>
+                <li>E-Mail: ipss_l@gmail.com</li>
+                <li>Redes Sociais: @ipss_l</li>
+            </ul>
+            <textarea type="text" placeholer="Escreva aqui..."></textarea>
+            <a href="/Programação Web/Projeto/HTML/Contactos.html">Enviar</a>
+        </div>
+        <hr></hr>
+        <div class="ContactosMapa">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1555.5840789626718!2d-9.156299157768604!3d38.759846966074946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd1933843c8532a3%3A0xd93296749817b174!2sIPLUSO%20-%20Instituto%20Polit%C3%A9cnico%20da%20Lusofonia!5e0!3m2!1sen!2spt!4v1704895568572!5m2!1sen!2spt" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+    <footer>
+        <div class="FooterContent">
+            <div class="FooterSiteInfo">
+                <ul>
+                    <li>Política de Cookies</li>
+                    <li>Termos e Condições</li>
+                    <li>Perguntas Frequentes</li>
+                </ul>
+            </div>
+            <div class="FooterSocials">
+                <a href="https://www.facebook.com" target="_blank"><img src="/Programação Web/Projeto/IMG/facebook.png" alt="facebooklogo">Facebook</a>
+                <a href="mailto:ipss_l@gmail.com" target="_blank"><img src="/Programação Web/Projeto/IMG/gmail.png" alt="gmaillogo">Gmail</a>
+                <a href="https://www.instagram.com" target="_blank"><img src="/Programação Web/Projeto/IMG/instagram.png" alt="instagramlogo">Instagram</a>
+                <a href="https://www.twitter.com" target="_blank"><img src="/Programação Web/Projeto/IMG/twitter.png" alt="twitterlogo">Twitter</a>
+                <a href="https://wa.me/+351925186686" target="_blank"><img src="/Programação Web/Projeto/IMG/whatsapp.png" alt="whatsapplogo">Whatsapp</a>
+            </div>
+        </div>
+        <hr></hr>
+        <h2>© 2021 IPSS - Todos os direitos reservados.</h2>
+    </footer>
+    <div id="overlay" class="overlay">
+        <div class="popup">
+            <div class="PopupTop">
+                <h3 id="popupTitle">Login</h3>
+                <img class="PopupX" src="/Programação Web/Projeto/IMG/x.svg" alt="X" onclick="closeOverlay()"/>
+            </div>
+            <form id="loginForm">
+                <label for="username">Nome de Utilizador:</label>
+                <input type="text" id="usernameL" name="usernameL" required>
+                <label for="password">Password:</label>
+                <input type="password" id="passwordL" name="passwordL" required>
+                <div class = "rememberme">
+                    <input type="checkbox" id="rememberme">
+                    <p>Lembre-se de mim!</p>
+                </div>
+                <button type="button" onclick="login()">Login</button>
+                <p id="error-messageL"></p>
+                <p id="loginToRegister">Ainda não tem conta? <u onclick="showRegister()">Registe-se!</u></p>
+            </form>
+            <form id="registerForm">
+                <p>Indique os seus dados</p>
+                <label for="ownname">Nome e Apelido:</label>
+                <input type="text" id="ownnameR" name="ownnameR" required>
+                <label for="username">Nome de Utilizador:</label>
+                <input type="text" id="usernameR" name="usernameR" required>
+                <label for="email">E-Mail:</label>
+                <input type="text" id="emailR" name="emailR" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password1R" name="password1L" required>
+                <label for="password">Repita a Password:</label>
+                <input type="password" id="password2R" name="password2L" required>
+                <button type="button" onclick="register()">Registar</button>
+                <p id="error-messageR"></p>
+                <p id="registerToLogin">Já tem conta? <u onclick="showLogin()">Faça Login!</u></p>
+            </form>
+        </div>
+    </div>
+    <script src="/Programação Web/Projeto/JS/sidebar.js"></script>
+    <script src="/Programação Web/Projeto/JS/loginregisto.js"></script
+</body>
+</html>

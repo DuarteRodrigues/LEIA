@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPSS - Atividades</title>
+    <link rel="stylesheet" href="/Programação Web/Projeto/CSS/Atividades.css">
+</head>
+<body>
+    <header>
+        <div class="HeaderContainer">
+            <a class="HeaderLogo" href="#"><img class="Logo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="IPSSLogo"></a>
+            <div class="HamburgerIcon"><img id ="hamburger" src="/Programação Web/Projeto/IMG/hamburger-menu.svg" alt="HamburgerMenu"></div>
+            <div class="HeaderLinks">
+                <div class="SidebarTop">
+                    <img class="SidebarLogo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="sidebarlogo">
+                    <img class="SidebarX" src="/Programação Web/Projeto/IMG/x.svg" alt="x">
+                </div>
+                <hr></hr>
+                <ul class ="HeaderMenu">
+                    <li><a class="HeaderOptions" id="ButtonHome" href="/Programação Web/Projeto/HTML/Inicio.html">Home</a></li>
+                    <li><a class="HeaderOptions" id="ButtonAtividades" href="/Programação Web/Projeto/HTML/Atividades.html">Atividades</a></li>
+                    <li><a class="HeaderOptions" id="ButtonGaleria" href="/Programação Web/Projeto/HTML/Galeria.html">Galeria</a></li>
+                    <li><a class="HeaderOptions" id="ButtonContactos" href="/Programação Web/Projeto/HTML/Contactos.html">Contactos</a></li>
+                    <li><p class="HeaderOptions" id="ButtonLogin" onclick="openOverlay()">Login/Registar</p></li>
+                    <li><a class="HeaderOptions" id="ButtonUser" href="/Programação Web/Projeto/HTML/Utilizador.html"><img src="/Programação Web/Projeto/IMG/user-icon.svg" alt="user"></a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="Atividades">
+        <h1>Atividades</h1>
+        <hr></hr>
+    </div>
+    <div class="AtividadesGrid">
+        <div class="GridContainer">
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/ApoioSocial.png" alt="ApoioSocial">
+                <div class="title">Apoio Social</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Reunioes.png" alt="Reuniões">
+                <div class="title">Reuniões</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Terapias.png" alt="Terapias">
+                <div class="title">Terapias</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/JogosDidaticos.png" alt="Jogos Didáticos">
+                <div class="title">Jogos Diáticos e de Tabuleiro</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Alojamento.png" alt="Alojamento">
+                <div class="title">Alojamento</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/AjudaComunitaria.png" alt="Ajuda Comunitária">
+                <div class="title">Ajuda Comunitária</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Braille.png" alt="Braille">
+                <div class="title">Braille</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/DiasEspeciais.png" alt="Dias Especiais">
+                <div class="title">Dias Especiais</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Passeios.png" alt="Passeios">
+                <div class="title">Passeios</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Multimedia.png" alt="Multimédia">
+                <div class="title">Multimédia</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/Comemoracoes Especiais.png" alt="Comemorações Especiais">
+                <div class="title">Comemorações Especiais</div>
+            </div>
+            <div class="GridItem">
+                <img src="/Programação Web/Projeto/IMG/GinásticaFisioterapia.png" alt="Ginástica/Fisioterapia">
+                <div class="title">Ginástica/Fisioterapia</div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="FooterContent">
+            <div class="FooterSiteInfo">
+                <ul>
+                    <li>Política de Cookies</li>
+                    <li>Termos e Condições</li>
+                    <li>Perguntas Frequentes</li>
+                </ul>
+            </div>
+            <div class="FooterSocials">
+                <a href="https://www.facebook.com" target="_blank"><img src="/Programação Web/Projeto/IMG/facebook.png" alt="facebooklogo">Facebook</a>
+                <a href="mailto:ipss_l@gmail.com" target="_blank"><img src="/Programação Web/Projeto/IMG/gmail.png" alt="gmaillogo">Gmail</a>
+                <a href="https://www.instagram.com" target="_blank"><img src="/Programação Web/Projeto/IMG/instagram.png" alt="instagramlogo">Instagram</a>
+                <a href="https://www.twitter.com" target="_blank"><img src="/Programação Web/Projeto/IMG/twitter.png" alt="twitterlogo">Twitter</a>
+                <a href="https://wa.me/+351925186686" target="_blank"><img src="/Programação Web/Projeto/IMG/whatsapp.png" alt="whatsapplogo">Whatsapp</a>
+            </div>
+        </div>
+        <hr></hr>
+        <h2>© 2021 IPSS - Todos os direitos reservados.</h2>
+    </footer>
+    <div id="overlay" class="overlay">
+        <div class="popup">
+            <div class="PopupTop">
+                <h3 id="popupTitle">Login</h3>
+                <img class="PopupX" src="/Programação Web/Projeto/IMG/x.svg" alt="X" onclick="closeOverlay()"/>
+            </div>
+            <form id="loginForm">
+                <label for="username">Nome de Utilizador:</label>
+                <input type="text" id="usernameL" name="usernameL" required>
+                <label for="password">Password:</label>
+                <input type="password" id="passwordL" name="passwordL" required>
+                <div class = "rememberme">
+                    <input type="checkbox" id="rememberme">
+                    <p>Lembre-se de mim!</p>
+                </div>
+                <button type="button" onclick="login()">Login</button>
+                <p id="error-messageL"></p>
+                <p id="loginToRegister">Ainda não tem conta? <u onclick="showRegister()">Registe-se!</u></p>
+            </form>
+            <form id="registerForm">
+                <p>Indique os seus dados</p>
+                <label for="ownname">Nome e Apelido:</label>
+                <input type="text" id="ownnameR" name="ownnameR" required>
+                <label for="username">Nome de Utilizador:</label>
+                <input type="text" id="usernameR" name="usernameR" required>
+                <label for="email">E-Mail:</label>
+                <input type="text" id="emailR" name="emailR" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password1R" name="password1L" required>
+                <label for="password">Repita a Password:</label>
+                <input type="password" id="password2R" name="password2L" required>
+                <button type="button" onclick="register()">Registar</button>
+                <p id="error-messageR"></p>
+                <p id="registerToLogin">Já tem conta? <u onclick="showLogin()">Faça Login!</u></p>
+            </form>
+        </div>
+    </div>
+    <script src="/Programação Web/Projeto/JS/sidebar.js"></script>
+    <script src="/Programação Web/Projeto/JS/loginregisto.js"></script
+</body>
+</html>

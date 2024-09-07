@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPSS - Utilizadores</title>
+    <link rel="stylesheet" href="/Programação Web/Projeto/CSS/Utilizador.css">
+</head>
+<body>
+    <header>
+        <div class="HeaderContainer">
+            <a class="HeaderLogo" href="#"><img class="Logo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="IPSSLogo"></a>
+            <div class="HamburgerIcon"><img id ="hamburger" src="/Programação Web/Projeto/IMG/hamburger-menu.svg" alt="HamburgerMenu"></div>
+            <div class="HeaderLinks">
+                <div class="SidebarTop">
+                    <img class="SidebarLogo" src="/Programação Web/Projeto/IMG/logo IPSS.svg" alt="sidebarlogo">
+                    <img class="SidebarX" src="/Programação Web/Projeto/IMG/x.svg" alt="x">
+                </div>
+                <hr></hr>
+                <ul class ="HeaderMenu">
+                    <li><a class="HeaderOptions" id="ButtonHome" href="/Programação Web/Projeto/HTML/Inicio.html">Home</a></li>
+                    <li><a class="HeaderOptions" id="ButtonAtividades" href="/Programação Web/Projeto/HTML/Atividades.html">Atividades</a></li>
+                    <li><a class="HeaderOptions" id="ButtonGaleria" href="/Programação Web/Projeto/HTML/Galeria.html">Galeria</a></li>
+                    <li><a class="HeaderOptions" id="ButtonContactos" href="/Programação Web/Projeto/HTML/Contactos.html">Contactos</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="Users">
+        <h1>Utilizadores</h1>
+        <hr></hr>
+    </div>
+    <div class="UserBody">
+        <table id="GridUser">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>NIF</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <a class="LogOff" href="/Programação Web/Projeto/HTML/Inicio.html" onclick="logoff()">Sair</a>
+    </div>
+    <script src="/Programação Web/Projeto/JS/sidebar.js"></script>
+    <script src="/Programação Web/Projeto/JS/utilizadores.js"></script>
+    <script src="/Programação Web/Projeto/JS/loginregisto.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</body>
+</html>
