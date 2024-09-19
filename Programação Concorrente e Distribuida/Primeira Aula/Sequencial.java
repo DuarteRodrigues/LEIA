@@ -2,7 +2,7 @@ public class Sequencial {
     
     public static void main(String[] args) throws InterruptedException{
         //Delay times
-        final int DELAY1 = 3000;
+        final int DELAY1 = 5000;
         final int DELAY2 = 3000;
 
         int proximo1 = DELAY1;
@@ -23,7 +23,7 @@ public class Sequencial {
                 proximo2 = DELAY2;
             }
             else{
-
+                System.out.println("Teste");
             }
         }
     }
