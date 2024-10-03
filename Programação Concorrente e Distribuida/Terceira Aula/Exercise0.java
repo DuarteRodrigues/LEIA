@@ -2,10 +2,10 @@
 // Nome: Duarte Pinto Rodrigues
 // Curso: LEIA
 // UC: Programação Concorrente e Distribuída
-// Grupo de Exercícios 2 Exercício 1
+// Grupo de Exercícios 2 Exercício 0
 
 /*
- Class that implements a simple counter
+ * Class that implements a simple counter
  */
 class Counter {
     private volatile int count=0;
@@ -14,7 +14,7 @@ class Counter {
 }
 
 /*
- Thread that implements a counter 1000 times
+ * Thread that implements a counter 1000 times
  */
 class CountingThread extends Thread {
     public final int MAX_COUNT = 50000;
@@ -39,7 +39,7 @@ class CountingThread extends Thread {
  * This is commonly known as a race. 
  */
 
-public class Exercise1 {
+public class Exercise0 {
     final static Counter counter = new Counter();
 
     public static void main(String[] args) throws InterruptedException {
