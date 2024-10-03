@@ -1,9 +1,3 @@
-// Nº Aluno: a22206488
-// Nome: Duarte Pinto Rodrigues
-// Curso: LEIA
-// UC: Programação Concorrente e Distribuída
-// Grupo de Exercícios 1 Exercício 2
-
 class NameThreadRunnable implements Runnable {
     private String name;
 

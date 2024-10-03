@@ -1,9 +1,3 @@
-// Nº Aluno: a22206488
-// Nome: Duarte Pinto Rodrigues
-// Curso: LEIA
-// UC: Programação Concorrente e Distribuída
-// Grupo de Exercícios 1 Exercício 1
-
 class NameThread extends Thread {
     private String name;
 

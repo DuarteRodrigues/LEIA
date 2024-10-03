@@ -1,9 +1,3 @@
-// Nº Aluno: a22206488
-// Nome: Duarte Pinto Rodrigues
-// Curso: LEIA
-// UC: Programação Concorrente e Distribuída
-// Grupo de Exercícios 1 Exercício 3
-
 public class Exercise3 {
     public static void main(String args[]) {
         // Create and initialize the Threads using lambda expressions for Runnable
