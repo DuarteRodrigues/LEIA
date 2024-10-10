@@ -31,8 +31,8 @@ class Chopstick extends Object{
 }
 
 class Philosopher extends Thread {
-    private Chopstick left, right;
-    private Random random;
+    final private Chopstick left, right;
+    final private Random random;
 
     public Philosopher(String name, Chopstick left, Chopstick right){
         super(name);
@@ -41,6 +41,7 @@ class Philosopher extends Thread {
         this.random = new Random();
     }
 
+    @Override
     public void run() {
         try{
             while(true){
