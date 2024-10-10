@@ -4,74 +4,66 @@
 // UC: Programação Concorrente e Distribuída
 // Grupo de Exercícios 2 Exercício 0
 
-/*
- * Class that implements a simple counter
- */
-class Counter {
-    private volatile int count=0;
-    public void increment() { count++; };
-    public int getCount() { return count; }
-}
-
-/*
- * Thread that implements a counter 1000 times
- */
-class CountingThread extends Thread {
-    public final int MAX_COUNT = 50000;
-    private Counter counter;
-
-    // It must be initialized like an object of the Counter type
-    CountingThread(Counter counter) {
-        this.counter = counter;
-    }
-
-    public void run(){
-        // Each thread increments the counter 10.000 times
-        for (int i = 0; i < MAX_COUNT; i++){
-            counter.increment();
-        }
-    }
-}
-
-/*
- * This code has a behavior that depends on the relative chaining of each
- * executed operation by the threads.
- * This is commonly known as a race. 
- */
-
 public class Exercise0 {
-    final static Counter counter = new Counter();
+    public static void main(String[] args){
+        Exercise0 ex0 = new Exercise0();
+        ex0.runExercise();
+    }
 
-    public static void main(String[] args) throws InterruptedException {
-        // Create the threads
-        CountingThread t1 = new CountingThread(counter);
-        CountingThread t2 = new CountingThread(counter);
+    void runExercise(){
+        int NUM_THREADS = 2;
+        int NUM_INCS_PER_THREAD = 10000;
+        Counter counter = new Counter();
+        Thread[] threads = new Thread[NUM_THREADS];
 
-        //Start the clock to check how long the iterations take
-        long start = System.currentTimeMillis();
+        long startTime = System.nanoTime();
 
-        //Initialize the threads
-        t1.start();
-        t2.start();
-
-        // Await for the end of the threads
-        t1.join();
-        t2.join();
-
-        // Stop the clock to check how long the iterations took
-        long stop = System.currentTimeMillis();
-        System.out.println("Elapsed time: " + (stop-start) + "ms");
-
-        // Take care of possible errors in the count
-        if (t1.MAX_COUNT + t2.MAX_COUNT != counter.getCount()){
-            System.out.println("Erro na contagem!");
+        for(int i = 0; i < NUM_THREADS; i++){
+            threads[i] = new Thread(new IncrementerThread(counter, NUM_INCS_PER_THREAD));
+            threads[i].start();
         }
 
-        // Value of the counter has to be 20.000, correct? Let's try!
-        System.out.println(counter.getCount());
-        if (counter.getCount() !=10000 * Thread.activeCount()){
-            throw new AssertionError("Contador INVÁLIDO!");
+        try {
+            for (int i = 0; i < NUM_THREADS; i++) {
+                threads[i].join();
+            }
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+        long endTime = System.nanoTime();
+
+        System.out.println("Running " + NUM_THREADS + "threads, " + NUM_INCS_PER_THREAD + " increments each.");
+        System.out.println("Elapsed time: " + (endTime - startTime) / 1000 + " us");
+        System.out.println("Expected7final count: " + NUM_THREADS * NUM_INCS_PER_THREAD + "/" + counter.getCounter());
+    }
+
+    class Counter {
+        private int counter = 0;
+
+        void increment(){
+            counter++;
+        }
+
+        int getCounter(){
+            return counter;
         }
     }
 
+    class IncrementerThread implements Runnable {
+        private Counter counter;
+        private int incrementsPerThread;
+
+        IncrementerThread(Counter counter, int incrementsPerThread) {
+            this.counter = counter;
+            this.incrementsPerThread = incrementsPerThread;
+        }
+
+        @Override
+        public void run() {
+            for (int i = 0; i < incrementsPerThread; i++) {
+                counter.increment();
+            }
+        }
+    }
 }
