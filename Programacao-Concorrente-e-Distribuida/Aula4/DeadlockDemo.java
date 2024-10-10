@@ -55,7 +55,7 @@ class Philosopher extends Thread {
                 }
             }
         } catch (InterruptedException e){
-
+            e.printStackTrace();
         } finally {
 
         }
