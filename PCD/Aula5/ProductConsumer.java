@@ -4,6 +4,24 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+public class ProductConsumer{
+    public static void main(String[] args) {
+        final int QUEUE_LENGTH = 5;
+        final int NUM_PRODUCERS = 2;
+        final int NUM_CONSUMERS = 6;
+
+        Data data = new Data(QUEUE_LENGTH);
+        
+        for (int i = 1; i <= NUM_PRODUCERS; i++){
+            new Thread(new Producer(data), "Producer " + i).start();
+        }
+ 
+        for (int i = 1; i <= NUM_CONSUMERS; i++){
+            new Thread(new Consumer(data), "Consumer " + i).start();
+        }
+    }
+}   
+
 class Data{
     Queue<String> q;
     int capacity;
@@ -84,21 +102,3 @@ class Producer implements Runnable{
         }
     }
 }
-
-public class ProductConsumer{
-    public static void main(String[] args) {
-        final int QUEUE_LENGTH = 5;
-        final int NUM_PRODUCERS = 2;
-        final int NUM_CONSUMERS = 6;
-
-        Data data = new Data(QUEUE_LENGTH);
-        
-        for (int i = 1; i <= NUM_PRODUCERS; i++){
-            new Thread(new Producer(data), "Producer " + i).start();
-        }
- 
-        for (int i = 1; i <= NUM_CONSUMERS; i++){
-            new Thread(new Consumer(data), "Consumer " + i).start();
-        }
-    }
-}   
