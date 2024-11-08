@@ -1,0 +1,222 @@
+Exercício 1 - Nome por defeito da thread principal de um programa.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        String name = Thread.currentThread().getName();
+        System.out.println(name);
+    }
+}
+
+Resposta: main
+
+Exercício 2 - Prioridades básicas de uma thread.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        System.out.println(Thread.MAX_PRIORITY);
+        System.out.println(Thread.NORM_PRIORITY);
+        System.out.println(Thread.MIN_PRIORITY);
+    }
+}
+
+Resposta: 10  5  1
+
+Exercício 3 - Prioridade por defeito de uma thread.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getPriority());
+    }
+}
+
+Resposta: 5
+
+Exercício 4 - Thread iniciada duas vezes.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        Thread thread = new Thread() {
+            public void run() {
+                System.out.println("Olé!");
+            }
+        };
+        thread.start();
+        try {
+            thread.start();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Resposta: Ocorre um erro pois a método start() é chamado 2 vezes
+
+Exercício 5 - Tipo de thread por defeito.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        Thread thread = Thread.currentThread();
+        System.out.println(thread.isDaemon());
+    }
+}
+
+Resposta: false
+
+Exercício 6 - Tipo de thread tem de ser alterada antes de a iniciar.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        Thread thread = new Thread();
+        thread.start();
+        thread.setDaemon(true);
+    }
+}~
+
+Resposta: setDaemon() tem de estar antes de start() e a Thread tem de ter um método run()
+
+Exercício 7 - Nomes das threads podem ser mudados, incluindo principal.
+class MyThread extends Thread {
+
+    public MyThread(String name) {
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        System.out.println(getName());
+    }
+}
+
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        MyThread thread = new MyThread("My_Thread_1");
+        thread.start();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        thread.setName("My_Thread_2");
+    }
+}
+
+Resposta: My_Thread_1
+
+Exercício 8 - Prioridades das threads devem estar entre 1 e 10.
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        Thread thread = new Thread();
+        thread.setPriority(12);
+        thread.start();
+    }
+}
+
+Resposta: Erro pois deve estar entre a prioridade mínima(1) e máxima(10)
+
+Exercício 9 - Qual a tread que dorme?
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        Thread myThread = new Thread() {
+            public void run() {
+                while (!isInterrupted()) {
+                    System.out.println(Thread.currentThread().getName() + ": I'm running...");
+                    try {sleep(1000);} catch (InterruptedException e) {interrupt();}
+                }
+            }
+        };
+        myThread.start();
+
+        try
+        {
+            myThread.sleep(5000);
+            System.out.println(Thread.currentThread().getName() + ": Woke up!");
+            myThread.interrupt();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Resposta:   Thread-0: I'm running...
+            Thread-0: I'm running...
+            Thread-0: I'm running...
+            Thread-0: I'm running...
+            Thread-0: I'm running...
+            main: Woke up!
+
+Exercício 10 - Método join().
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        
+        Thread t3 = new Thread() {
+            public void run() {
+                System.out.println(3);
+            }
+        };
+         
+        Thread t2 = new Thread() {
+            public void run() 
+            {
+                try {
+                    t3.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                 
+                System.out.println(2);
+            }
+        };
+         
+        Thread t1 = new Thread() {
+            public void run() {
+                try {
+                    t2.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                 
+                System.out.println(1);
+            }
+        };
+         
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+Resposta: 3 2 1
+
+Exercício 11 - Keyword synchronized.
+class AnyClass {
+    String s ="1";
+     
+    synchronized void anyMethod() {
+        s = s + s;
+    }
+}
+
+public class JavaPCDClass {
+    public static void main(String[] args) {
+        AnyClass anyClass = new AnyClass();
+         
+        new Thread() {
+            public void run() {
+                anyClass.anyMethod();
+            }
+        }.start();
+         
+        new Thread() {
+            public void run() {
+                anyClass.anyMethod();
+            }
+        }.start();
+         
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         
+        System.out.println(anyClass.s);
+    }
+}
+
+Resposta: 1111
