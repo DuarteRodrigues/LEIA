@@ -48,7 +48,7 @@ public class ChatClient implements ChatClientInterface{
 
     @Override
     public void startMessageSendThread() {
-        // Not needed for ChatClientGUI
+        out.println(clientName); // Notify all clients about the new user
     }
 
     public void close() throws IOException {

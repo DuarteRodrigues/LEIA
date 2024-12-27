@@ -2,8 +2,8 @@
  * ChatServer: Manages client connections and broadcasts messages.
  */
 
- import java.io.*;
- import java.net.*;
+import java.io.*;
+import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,6 +40,9 @@ import java.util.*;
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
 
+                // Get client name
+                clientName = in.readLine();
+        
                 // Add client to lists
                 synchronized (clientWriters) {
                     clientWriters.add(out);
@@ -47,12 +50,12 @@ import java.util.*;
                 }
 
                 // Notify all clients about the new user
-                broadcastMessage(clientName + " has entered the chat");
+                broadcastMessage("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + clientName + " has entered the chat.");
 
                 // Read and forward messages from the client
                 String message;
                 while((message = in.readLine()) != null){
-                    broadcastMessage("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + clientName + ": " + message);
+                    broadcastMessage(message);
                 }
             
             } catch (IOException e){
@@ -65,7 +68,7 @@ import java.util.*;
                             clientWriters.remove(out);
                             clientNames.remove(clientName);
                         }
-                        broadcastMessage(clientName + " has left the chat");
+                        broadcastMessage("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + clientName + " has left the chat.");
                     }
                     if (socket != null) {
                         socket.close();
@@ -78,9 +81,9 @@ import java.util.*;
 
         private void broadcastMessage(String message) {
             // Add timestamp to the incoming message
-            String timestampedMessage = "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message;
+            String timestampedMessage = message;
 
-            // Broadcast the message to all connected clientes
+            // Broadcast the message to all connected clients
             synchronized (clientWriters) {
                 for (PrintWriter writer : clientWriters) {
                     writer.println(timestampedMessage);  // Send message with timestamp

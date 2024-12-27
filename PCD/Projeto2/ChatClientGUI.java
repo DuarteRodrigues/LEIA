@@ -48,26 +48,18 @@ public class ChatClientGUI extends JFrame {
         /**
          * Dialog box for entering name.
          */
-        String clientName = JOptionPane.showInputDialog(this, "Enter your name:", "Name Entry", JOptionPane.PLAIN_MESSAGE);
-        if (clientName == null || clientName.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Name cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-        this.setTitle("Chat Application - " + clientName);
+        String name = JOptionPane.showInputDialog(this, "Enter your name:", "Name Entry", JOptionPane.PLAIN_MESSAGE);
+        this.setTitle("Chat Application - " + name);
         textField = new JTextField();
         textField.setFont(textFont);
         textField.setForeground(textColor);
         textField.setBackground(backgroundColor);
         textField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                /*String message = "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + name + ": " + textField.getText();
+                String message = "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + name + ": "
+                        + textField.getText();
                 client.sendMessage(message);  // Send message
-                textField.setText("");*/
-
-                String message = clientName + ": " + textField.getText(); // Include name in message
-                client.sendMessage(message);  // Send message to server
-                messageArea.append("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + message + "\n");  // Append message to message area with timestamp
-                textField.setText("");  // Clear the text field
+                textField.setText("");
             }
         });
 
@@ -79,7 +71,7 @@ public class ChatClientGUI extends JFrame {
         exitButton.setBackground(buttonColor);
         exitButton.setForeground(Color.WHITE);
         exitButton.addActionListener(e -> {
-            String departureMessage = clientName + " has left the chat.";
+            String departureMessage = name + " has left the chat.";
             client.sendMessage(departureMessage); // Send "exit" message to participants
             try {
                 Thread.sleep(1000);
@@ -102,7 +94,7 @@ public class ChatClientGUI extends JFrame {
          * Create ChatClient.
          */
         try {
-            this.client = new ChatClient(clientName);
+            this.client = new ChatClient(name);
             this.client.connectToServer("127.0.0.1", 5000);
             this.client.setMessageReceivedHandler(this::onMessageReceived);
             client.startMessageSendThread();
