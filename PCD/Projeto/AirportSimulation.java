@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +21,7 @@ public class AirportSimulation{
     private static int time = 0;                  // Waiting queue max size
     private static final int SIMULATION_TIME = 1440;                // 24H in time units
     private static final int TIME_UNIT_MS = 10;                     // Time unit = 10ms
-    private static final double ARRIVAL_RATE = 0.25;                // Rate of arrival (avg. of 1 every 4 minutes)
+    private static final double ARRIVAL_RATE = 0.2;                // Rate of arrival (avg. of 1 every 4 minutes)
     private static final double DEPARTURE_RATE = 0.2;               // Rate of departure (avg. of 1 every 5 minutes)
     private static final double MALFUNCTION_PROBABILITY = 0.0024;    // Percentage probability of a plane malfunction
 
@@ -58,7 +56,7 @@ public class AirportSimulation{
             // Processing of new flights
             processArrivals(executor);    // Processes arrivals
             processDepartures(executor);  // Processes departures
-            processRunways();               // Allocates flights to runways
+            //processRunways();             // Allocates flights to runways
 
             try {
                 Thread.sleep(TIME_UNIT_MS);         // Moves time forward in the simulation
@@ -80,10 +78,11 @@ public class AirportSimulation{
                 // Simulate a malfunction
                 System.out.println(currentTime() + " A flight experienced a malfunction and was redirected.");
                 divertedFlights++;
-            } else if(arrivalsQueue.size() < MAX_QUEUE_SIZE){
+            } else if(arrivalsQueue.size() < MAX_QUEUE_SIZE ){
                 // Normal processing
                 Flight flight = new Flight("Arrival");
                 arrivalsQueue.add(flight);
+                new Thread(flight).start();
                 System.out.println(currentTime() + " Flight " + flight.getId() + " added to arrivals queue.");
             } else {
                 // Queue is full, divert the flight
@@ -95,7 +94,7 @@ public class AirportSimulation{
 
     // Processes departures, adding them to the departure queue or cancelled flights
 
-    private void processDepartures( ExecutorService executor){
+    private void processDepartures(ExecutorService executor){
         int departures = Poisson.getRandom(DEPARTURE_RATE);
         for (int i = 0; i < departures; i++) {
             if (random.nextDouble() < MALFUNCTION_PROBABILITY) {
@@ -105,6 +104,7 @@ public class AirportSimulation{
             } else if (departuresQueue.size() < MAX_QUEUE_SIZE) {
                 Flight flight = new Flight("Departure");
                 departuresQueue.add(flight);
+                new Thread(flight).start();
                 System.out.println(currentTime() + " Flight " + flight.getId() + " added to departures queue.");
             } else {
                 cancelledFlights++; // Increments the count of redirected flights
@@ -119,10 +119,10 @@ public class AirportSimulation{
         for (Runway runway : runways) {
             if (!runway.isBusy() && !arrivalsQueue.isEmpty()) {
                 Flight flight = arrivalsQueue.poll();
-                runway.assignFlight(flight, LANDING_DURATION);
+                runway.assignRunway(flight, LANDING_DURATION);
             } else if (!runway.isBusy() && !departuresQueue.isEmpty()) {
                 Flight flight = departuresQueue.poll();
-                runway.assignFlight(flight, TAKEOFF_DURATION);
+                runway.assignRunway(flight, TAKEOFF_DURATION);
             }
         }
     }
@@ -145,7 +145,7 @@ public class AirportSimulation{
     }
 
     // Class that represents a flight
-    private static class Flight{
+    private class Flight implements Runnable{
         private static int counter = 0; // Global counter for unique IDs
         private final int id;
         private final String type;
@@ -163,10 +163,21 @@ public class AirportSimulation{
         public String getType(){
             return type;
         }
+
+        @Override
+        public void run(){
+            boolean assigned = false;
+            do{
+                for (Runway runway : runways) {
+                    assigned = runway.assignRunway(this, type.equals("Arrival") ? LANDING_DURATION : TAKEOFF_DURATION);
+                }
+            }while (!assigned);
+            
+        }
     }
 
     // Class that represents a runway
-    private static class Runway{
+    private class Runway{
         private final int id;
         private int landings = 0;
         private int takeoffs = 0;
@@ -182,22 +193,30 @@ public class AirportSimulation{
 
         // Attributes a flight to a runway to the execution(landing and takeoff)
 
-        public void assignFlight(Flight flight, int duration){
-            busy = true;
-            System.out.println(AirportSimulation.currentTime() + " Flight " + flight.getId() + " assigned to Runway " + id + " for " + flight.getType().toLowerCase() + ".");
-            
-            new Timer().schedule(new TimerTask() {      
-                @Override
-                public void run(){
-                    busy = false;
-                    if ("Arrival".equals(flight.getType())) {
-                        landings++;
-                    } else{
-                        takeoffs++;
-                    }
-                    System.out.println(AirportSimulation.currentTime() + " Flight " + flight.getId() + " completed on Runway " + id + ".");
+        synchronized public boolean assignRunway(Flight flight, int duration){
+            if (!isBusy()) {
+                busy = true; 
+                try {
+                    Thread.sleep(duration * TIME_UNIT_MS);
+                    System.out.println(AirportSimulation.currentTime() + " Flight " + flight.getId() + " assigned to Runway " + id + " for " + flight.getType().toLowerCase() + ".");
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            }, duration * TIME_UNIT_MS);
+                if (flight.type.equals("Arrival")){
+                    System.out.println("Arrival Queue: " + arrivalsQueue.size());
+                    arrivalsQueue.poll(); 
+                    landings++;
+                 } else { 
+                    System.out.println("Departure Queue: " + departuresQueue.size());
+                    departuresQueue.poll();
+                    takeoffs++;
+                 }
+                busy = false;
+                return true;
+            } else {
+                return false;
+            }
+            
         }
 
         // Displays the usability stats of the runway
@@ -224,6 +243,7 @@ public class AirportSimulation{
         }
     }
 }
+
 
 // There are planes still in queue when the day is over, dispatch the last flights before closing the day in the airport 
 // Runway mutual exclusivity is missing from the project
