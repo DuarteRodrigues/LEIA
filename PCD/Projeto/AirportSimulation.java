@@ -19,7 +19,8 @@ public class AirportSimulation{
     private static final int NUM_RUNWAYS = 2;                       // Number of airport runways
     private static final int TAKEOFF_DURATION = 2;                  // In time units
     private static final int LANDING_DURATION = 3;                  // In time units
-    private static final int MAX_QUEUE_SIZE = 10;                   // Waiting queue max size
+    private static final int MAX_QUEUE_SIZE = 10; 
+    private static int time = 0;                  // Waiting queue max size
     private static final int SIMULATION_TIME = 1440;                // 24H in time units
     private static final int TIME_UNIT_MS = 10;                     // Time unit = 10ms
     private static final double ARRIVAL_RATE = 0.25;                // Rate of arrival (avg. of 1 every 4 minutes)
@@ -53,11 +54,11 @@ public class AirportSimulation{
         ExecutorService executor = Executors.newCachedThreadPool();
 
         // Simulation's main loop
-        for (int time = 0; time < SIMULATION_TIME; time ++){
+        for (time = 0; time < SIMULATION_TIME; time ++){
             // Processing of new flights
-            processArrivals(time, executor);    // Processes arrivals
-            processDepartures(time, executor);  // Processes departures
-            processRunways(time);               // Allocates flights to runways
+            processArrivals(executor);    // Processes arrivals
+            processDepartures(executor);  // Processes departures
+            processRunways();               // Allocates flights to runways
 
             try {
                 Thread.sleep(TIME_UNIT_MS);         // Moves time forward in the simulation
@@ -72,56 +73,56 @@ public class AirportSimulation{
 
     // Processes arrivals, adding them to the arrival queue or diverted flights
 
-    private void processArrivals(int time , ExecutorService executor){
+    private void processArrivals( ExecutorService executor){
         int arrivals = Poisson.getRandom(ARRIVAL_RATE);
         for (int i = 0; i < arrivals; i++){
             if (random.nextDouble() < MALFUNCTION_PROBABILITY) {
                 // Simulate a malfunction
-                System.out.println(currentTime(time) + " A flight experienced a malfunction and was redirected.");
+                System.out.println(currentTime() + " A flight experienced a malfunction and was redirected.");
                 divertedFlights++;
             } else if(arrivalsQueue.size() < MAX_QUEUE_SIZE){
                 // Normal processing
-                Flight flight = new Flight("Arrival", time);
+                Flight flight = new Flight("Arrival");
                 arrivalsQueue.add(flight);
-                System.out.println(currentTime(time) + " Flight " + flight.getId() + "added to arrivals queue.");
+                System.out.println(currentTime() + " Flight " + flight.getId() + " added to arrivals queue.");
             } else {
                 // Queue is full, divert the flight
                 divertedFlights++;  // Increments the count of redirected flights
-                System.out.println(currentTime(time) + " An arrival flight was diverted");
+                System.out.println(currentTime() + " An arrival flight was diverted");
             }
         }
     }
 
     // Processes departures, adding them to the departure queue or cancelled flights
 
-    private void processDepartures(int time, ExecutorService executor){
+    private void processDepartures( ExecutorService executor){
         int departures = Poisson.getRandom(DEPARTURE_RATE);
         for (int i = 0; i < departures; i++) {
             if (random.nextDouble() < MALFUNCTION_PROBABILITY) {
                 // Simulate a malfunction
-                System.out.println(currentTime(time) + " A flight experienced a malfunction and was cancelled.");
+                System.out.println(currentTime() + " A flight experienced a malfunction and was cancelled.");
                 cancelledFlights++;
             } else if (departuresQueue.size() < MAX_QUEUE_SIZE) {
-                Flight flight = new Flight("Departure", time);
+                Flight flight = new Flight("Departure");
                 departuresQueue.add(flight);
-                System.out.println(currentTime(time) + " Flight " + flight.getId() + " added to departures queue.");
+                System.out.println(currentTime() + " Flight " + flight.getId() + " added to departures queue.");
             } else {
                 cancelledFlights++; // Increments the count of redirected flights
-                System.out.println(currentTime(time) + " A departure flight was cancelled.");
+                System.out.println(currentTime() + " A departure flight was cancelled.");
             }
         }
     }
 
     // Processes runway management, asserting flights to land and takeoff, if available
 
-    private void processRunways(int time){
+    private void processRunways(){
         for (Runway runway : runways) {
             if (!runway.isBusy() && !arrivalsQueue.isEmpty()) {
                 Flight flight = arrivalsQueue.poll();
-                runway.assignFlight(flight, LANDING_DURATION, time);
+                runway.assignFlight(flight, LANDING_DURATION);
             } else if (!runway.isBusy() && !departuresQueue.isEmpty()) {
                 Flight flight = departuresQueue.poll();
-                runway.assignFlight(flight, TAKEOFF_DURATION, time);
+                runway.assignFlight(flight, TAKEOFF_DURATION);
             }
         }
     }
@@ -139,7 +140,7 @@ public class AirportSimulation{
 
     // Converts the time units into a readable string (hh:mm)
 
-    private String currentTime(int time){
+    private static String currentTime(){
         return (time/60) + ":" + String.format("%02d", time % 60);
     }
 
@@ -149,10 +150,10 @@ public class AirportSimulation{
         private final int id;
         private final String type;
 
-        public Flight (String type, int creationTime){
+        public Flight (String type){
             this.id = ++counter;
             this.type = type;
-            System.out.println(currentTime(creationTime) + " A flight with ID " + id + " was created.");
+            System.out.println(AirportSimulation.currentTime() + " A flight with ID " + id + " was created.");
         }
 
         public int getId(){
@@ -161,10 +162,6 @@ public class AirportSimulation{
 
         public String getType(){
             return type;
-        }
-
-        private static String currentTime(int time) {
-            return (time/60) + ":" + String.format("%02d", time % 60);
         }
     }
 
@@ -185,9 +182,9 @@ public class AirportSimulation{
 
         // Attributes a flight to a runway to the execution(landing and takeoff)
 
-        public void assignFlight(Flight flight, int duration, int startTime){
+        public void assignFlight(Flight flight, int duration){
             busy = true;
-            System.out.println(currentTime(startTime) + " Flight " + flight.getId() + " assigned to Runway " + id + " for " + flight.getType().toLowerCase() + ".");
+            System.out.println(AirportSimulation.currentTime() + " Flight " + flight.getId() + " assigned to Runway " + id + " for " + flight.getType().toLowerCase() + ".");
             
             new Timer().schedule(new TimerTask() {      
                 @Override
@@ -198,7 +195,7 @@ public class AirportSimulation{
                     } else{
                         takeoffs++;
                     }
-                    System.out.println(currentTime(startTime + duration) + " Flight " + flight.getId() + " completed on Runway " + id + ".");
+                    System.out.println(AirportSimulation.currentTime() + " Flight " + flight.getId() + " completed on Runway " + id + ".");
                 }
             }, duration * TIME_UNIT_MS);
         }
@@ -209,9 +206,6 @@ public class AirportSimulation{
             System.out.println("Runway " + id + ": " + landings + " landings, " + takeoffs + " takeoffs.");
         }
 
-        private static String currentTime(int time) {
-            return (time / 60) + ":" + String.format("%02d", time % 60);
-        }
     }
 
     // Class to generate random events on the basis of the Poisson distribution
@@ -230,3 +224,6 @@ public class AirportSimulation{
         }
     }
 }
+
+// There are planes still in queue when the day is over, dispatch the last flights before closing the day in the airport 
+// Runway mutual exclusivity is missing from the project
