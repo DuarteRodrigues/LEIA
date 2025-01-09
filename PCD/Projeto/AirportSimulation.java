@@ -246,4 +246,3 @@ public class AirportSimulation{
 
 
 // There are planes still in queue when the day is over, dispatch the last flights before closing the day in the airport 
-// Runway mutual exclusivity is missing from the project
